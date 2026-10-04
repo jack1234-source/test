@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Work | Nova Studio</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --primary: #7c3aed;
+        --secondary: #22d3ee;
+        --text: #e5eefb;
+        --muted: #a7b4c9;
+        --border: rgba(148, 163, 184, 0.2);
+      }
+      html[data-theme="light"] {
+        --bg: #eef4ff;
+        --primary: #6d28d9;
+        --secondary: #0891b2;
+        --text: #101828;
+        --muted: #4b5563;
+        --border: rgba(107, 114, 128, 0.15);
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Arial, sans-serif; background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 55%); color: var(--text); }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0 28px; }
+      .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      .nav { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; }
+      .nav a { color: var(--muted); text-decoration: none; }
+      .nav a:hover { color: var(--text); }
+      .theme-toggle { border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); border-radius: 999px; padding: 9px 14px; cursor: pointer; font-weight: 700; }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+      .project { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 24px; padding: 22px; }
+      .project h2 { margin-top: 0; }
+      .project p { color: var(--muted); line-height: 1.7; }
+      .info-card {
+        cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      }
+      .info-card:hover, .info-card:focus-visible {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 34px rgba(124, 58, 237, 0.18);
+        border-color: rgba(124, 58, 237, 0.55);
+        outline: none;
+      }
+      .info-card .details { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.25s ease, opacity 0.25s ease, margin-top 0.25s ease; }
+      .info-card.active .details { max-height: 200px; opacity: 1; margin-top: 14px; }
+      .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+      .tags span { background: rgba(124,58,237,0.12); color: #d8c8ff; border-radius: 999px; padding: 7px 10px; font-size: 0.75rem; }
+      h1 { font-size: clamp(2.2rem, 4vw, 3.5rem); margin-bottom: 12px; }
+      .intro { color: var(--muted); max-width: 700px; margin-bottom: 28px; line-height: 1.7; }
+      @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div class="brand">Nova</div>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/work">Work</a>
+          <a href="/contact">Contact</a>
+          <button type="button" class="theme-toggle" data-theme-toggle>☀️ Light mode</button>
+        </nav>
+      </header>
+
+      <main>
+        <h1>Selected work.</h1>
+        <p class="intro">A few examples of the clarity, structure, and measurable lift we bring to brands and digital products.</p>
+
+        <section class="grid">
+          <article class="project info-card active" tabindex="0" aria-expanded="true">
+            <h2>Northstar Labs</h2>
+            <p>An AI workflow platform repositioned for enterprise buyers with a cleaner narrative and conversion-focused website.</p>
+            <div class="tags"><span>Brand</span><span>UX</span></div>
+            <div class="details">
+              <p>We refined the positioning so buyers quickly understood the platform value and the buying path felt more direct.</p>
+            </div>
+          </article>
+          <article class="project info-card" tabindex="0" aria-expanded="false">
+            <h2>Harbor Commerce</h2>
+            <p>Improved mobile shopping journeys and checkout confidence for a fast-growing retail brand.</p>
+            <div class="tags"><span>Design</span><span>Growth</span></div>
+            <div class="details">
+              <p>We simplified the path to purchase and removed friction across the most important mobile moments.</p>
+            </div>
+          </article>
+          <article class="project info-card" tabindex="0" aria-expanded="false">
+            <h2>Pixel Forge</h2>
+            <p>A launch system for a new product category, combining campaign structure with product storytelling.</p>
+            <div class="tags"><span>Launch</span><span>Strategy</span></div>
+            <div class="details">
+              <p>The result was a more confident launch narrative that converted early interest into long-term traction.</p>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="/feature.js"></script>
+  </body>
+</html>

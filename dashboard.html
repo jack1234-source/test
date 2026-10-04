@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Nova Studio</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --primary: #7c3aed;
+        --secondary: #22d3ee;
+        --text: #e5eefb;
+        --muted: #a7b4c9;
+        --border: rgba(148, 163, 184, 0.2);
+      }
+      html[data-theme="light"] { --bg: #eef4ff; --primary: #6d28d9; --secondary: #0891b2; --text: #101828; --muted: #4b5563; --border: rgba(107, 114, 128, 0.15); }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Arial, sans-serif; background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 55%); color: var(--text); }
+      .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0 28px; }
+      .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      .nav { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+      .nav a { color: var(--muted); text-decoration: none; }
+      .nav a:hover { color: var(--text); }
+      .theme-toggle { border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); border-radius: 999px; padding: 9px 14px; cursor: pointer; font-weight: 700; }
+      .btn { display: inline-block; padding: 12px 18px; border-radius: 12px; border: 0; cursor: pointer; font-weight: 700; background: linear-gradient(135deg, var(--primary), #a855f7); color: white; }
+      .panel { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 24px; padding: 24px; }
+      h1 { margin-top: 0; }
+      .meta { color: var(--muted); margin: 0 0 20px; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: 14px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+      .empty { color: var(--muted); }
+      .status { min-height: 24px; font-weight: 700; }
+      .status[data-state="error"] { color: #f87171; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div class="brand">Nova</div>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/dashboard">Dashboard</a>
+          <a href="/contact">Contact</a>
+          <button type="button" class="btn" id="logout-btn">Logout</button>
+          <button type="button" class="theme-toggle" data-theme-toggle>☀️ Light mode</button>
+        </nav>
+      </header>
+
+      <div class="panel">
+        <h1>My submissions</h1>
+        <p id="user-meta" class="meta">Loading account details...</p>
+        <p id="dashboard-status" class="status" data-state="idle"></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="submission-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="/feature.js"></script>
+    <script>
+      async function loadDashboard() {
+        try {
+          const meResponse = await fetch('/api/me');
+          if (!meResponse.ok) {
+            window.location.href = '/login';
+            return;
+          }
+          const me = await meResponse.json();
+          document.getElementById('user-meta').textContent = `Logged in as ${me.username} (${me.role})`;
+
+          const submissionsResponse = await fetch('/api/my-submissions');
+          if (!submissionsResponse.ok) throw new Error('Could not load submissions.');
+          const data = await submissionsResponse.json();
+          const tbody = document.getElementById('submission-body');
+          if (!data.submissions.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty">No submissions yet.</td></tr>';
+            return;
+          }
+
+          tbody.innerHTML = data.submissions.map((item) => `
+            <tr>
+              <td>${item.project_type}</td>
+              <td>${item.email}</td>
+              <td>${item.message}</td>
+              <td>${new Date(item.created_at).toLocaleString()}</td>
+            </tr>
+          `).join('');
+        } catch (error) {
+          document.getElementById('dashboard-status').textContent = error.message;
+          document.getElementById('dashboard-status').dataset.state = 'error';
+        }
+      }
+
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await fetch('/api/logout', { method: 'POST' });
+        window.location.href = '/login';
+      });
+
+      loadDashboard();
+    </script>
+  </body>
+</html>

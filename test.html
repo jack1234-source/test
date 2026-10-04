@@ -7,6 +7,7 @@
     <style>
       :root {
         --bg: #0b1020;
+        --bg-elevated: #111827;
         --panel: rgba(17, 24, 39, 0.8);
         --panel-light: rgba(255, 255, 255, 0.06);
         --primary: #7c3aed;
@@ -14,9 +15,29 @@
         --text: #e5eefb;
         --muted: #a7b4c9;
         --accent: #fbbf24;
+        --border: rgba(148, 163, 184, 0.2);
+        --input-bg: rgba(15, 23, 42, 0.72);
+        --success: #34d399;
+        --error: #f87171;
+      }
+
+      html[data-theme="light"] {
+        --bg: #eef4ff;
+        --bg-elevated: #ffffff;
+        --panel: rgba(255, 255, 255, 0.9);
+        --panel-light: rgba(15, 23, 42, 0.04);
+        --primary: #6d28d9;
+        --secondary: #0891b2;
+        --text: #101828;
+        --muted: #4b5563;
+        --accent: #f59e0b;
+        --border: rgba(107, 114, 128, 0.15);
+        --input-bg: rgba(255, 255, 255, 0.9);
       }
 
       * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
 
       body {
         margin: 0;
@@ -36,6 +57,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 18px 0 28px;
+        gap: 18px;
       }
 
       .brand {
@@ -49,6 +71,7 @@
         display: flex;
         gap: 22px;
         flex-wrap: wrap;
+        align-items: center;
       }
 
       .nav a {
@@ -58,6 +81,16 @@
       }
 
       .nav a:hover { color: var(--text); }
+
+      .theme-toggle {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 9px 14px;
+        cursor: pointer;
+        font-weight: 700;
+      }
 
       .hero {
         display: grid;
@@ -111,6 +144,8 @@
         border-radius: 12px;
         text-decoration: none;
         font-weight: 700;
+        border: 0;
+        cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
@@ -132,7 +167,7 @@
 
       .card {
         background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
-        border: 1px solid rgba(148, 163, 184, 0.2);
+        border: 1px solid var(--border);
         border-radius: 24px;
         padding: 22px;
         box-shadow: 0 26px 80px rgba(2, 6, 23, 0.5);
@@ -158,18 +193,54 @@
         margin-bottom: 6px;
       }
 
-      .features {
+      .features,
+      .work-grid,
+      .faq-list,
+      .contact-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 24px;
+      }
+
+      .features {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         padding: 20px 0 80px;
       }
 
-      .feature {
+      .feature,
+      .project,
+      .faq-item,
+      .contact-panel {
         background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.08);
+        border: 1px solid var(--border);
         border-radius: 20px;
         padding: 26px 22px;
+      }
+
+      .info-card {
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      }
+
+      .info-card:hover,
+      .info-card:focus-visible {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 34px rgba(124, 58, 237, 0.18);
+        border-color: rgba(124, 58, 237, 0.55);
+        outline: none;
+      }
+
+      .info-card .details {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.25s ease, opacity 0.25s ease, margin-top 0.25s ease;
+      }
+
+      .info-card.active .details {
+        max-height: 160px;
+        opacity: 1;
+        margin-top: 14px;
       }
 
       .feature-icon {
@@ -184,19 +255,161 @@
         margin-bottom: 18px;
       }
 
-      .feature h3 {
+      .feature h3,
+      .project h3,
+      .contact-panel h3 {
         margin: 0 0 10px;
         font-size: 1.2rem;
       }
 
-      .feature p {
-        margin: 0;
+      .feature p,
+      .project p,
+      .contact-panel p,
+      .faq-answer,
+      .faq-item button {
         color: var(--muted);
         line-height: 1.6;
       }
 
+      .section-heading {
+        margin-bottom: 22px;
+      }
+
+      .section-heading h2 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 3vw, 2.8rem);
+      }
+
+      .section-heading p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .work-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding-bottom: 70px;
+      }
+
+      .project-tags {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .project-tags span {
+        font-size: 0.75rem;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.12);
+        color: #d8c8ff;
+      }
+
+      .faq-list {
+        padding-bottom: 70px;
+      }
+
+      .faq-item {
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .faq-item button {
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        border: 0;
+        color: var(--text);
+        padding: 22px 24px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .faq-item .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 24px;
+        transition: max-height 0.25s ease, padding 0.2s ease;
+      }
+
+      .faq-item.open .faq-answer {
+        max-height: 180px;
+        padding: 0 24px 22px;
+      }
+
+      .faq-item button::after {
+        content: "+";
+        font-size: 1.4rem;
+        color: var(--secondary);
+      }
+
+      .faq-item.open button::after {
+        content: "−";
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr 1.1fr;
+        padding-bottom: 50px;
+      }
+
+      form {
+        display: grid;
+        gap: 16px;
+      }
+
+      .field-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        font-weight: 700;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 14px 15px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text);
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+
+      .form-status {
+        min-height: 24px;
+        margin: 0;
+        font-weight: 700;
+      }
+
+      .form-status[data-state="success"] {
+        color: var(--success);
+      }
+
+      .form-status[data-state="error"] {
+        color: var(--error);
+      }
+
       @media (max-width: 768px) {
-        .hero, .features {
+        .hero,
+        .features,
+        .work-grid,
+        .contact-grid,
+        .field-row {
           grid-template-columns: 1fr;
         }
 
@@ -217,15 +430,16 @@
       <header class="topbar">
         <div class="brand">Nova</div>
         <nav class="nav">
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#work">Work</a>
-          <a href="#contact">Contact</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/work">Work</a>
+          <a href="/contact">Contact</a>
+          <button type="button" class="theme-toggle" data-theme-toggle>☀️ Light mode</button>
         </nav>
       </header>
 
       <main class="hero">
-        <section>
+        <section id="about">
           <div class="eyebrow">Creative digital studio</div>
           <h1>Build bold ideas into <span class="highlight">beautiful experiences</span>.</h1>
           <p>
@@ -257,25 +471,146 @@
       </main>
 
       <section id="services" class="features">
-        <article class="feature">
+        <article class="feature info-card active" tabindex="0" aria-expanded="true">
           <div class="feature-icon">01</div>
           <h3>Brand Strategy</h3>
           <p>We shape distinctive identities and messaging that communicate your value clearly and memorably.</p>
+          <div class="details">
+            <p>It helps teams clarify positioning, audience value, and the story behind every campaign.</p>
+          </div>
         </article>
 
-        <article class="feature">
+        <article class="feature info-card" tabindex="0" aria-expanded="false">
           <div class="feature-icon">02</div>
           <h3>Web Design</h3>
           <p>From concept to launch, we craft elegant interfaces that feel premium and perform beautifully.</p>
+          <div class="details">
+            <p>We balance visual polish with conversion flow so the user journey feels effortless and persuasive.</p>
+          </div>
         </article>
 
-        <article class="feature">
+        <article class="feature info-card" tabindex="0" aria-expanded="false">
           <div class="feature-icon">03</div>
           <h3>Growth Marketing</h3>
           <p>We turn attention into traction with campaigns, optimization, and customer-focused conversion design.</p>
+          <div class="details">
+            <p>Our focus is on sharper positioning, better funnel clarity, and smarter testing loops.</p>
+          </div>
         </article>
       </section>
+
+      <section id="work">
+        <div class="section-heading">
+          <h2>Selected work</h2>
+          <p>We help teams turn momentum into measurable growth.</p>
+        </div>
+        <div class="work-grid">
+          <article class="project">
+            <h3>Northstar Labs</h3>
+            <p>A SaaS rebrand and website refresh that led to a 44% increase in demo requests.</p>
+            <div class="project-tags">
+              <span>Branding</span>
+              <span>Design</span>
+            </div>
+          </article>
+
+          <article class="project">
+            <h3>Harbor Commerce</h3>
+            <p>An ecommerce experience tuned for fast checkout flows and higher conversion across mobile.</p>
+            <div class="project-tags">
+              <span>UX</span>
+              <span>Growth</span>
+            </div>
+          </article>
+
+          <article class="project">
+            <h3>Pixel Forge</h3>
+            <p>Product storytelling and campaign design for a new AI platform launch.</p>
+            <div class="project-tags">
+              <span>Launch</span>
+              <span>Marketing</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="faq-list" aria-label="Frequently asked questions">
+        <div class="section-heading">
+          <h2>Frequently asked questions</h2>
+          <p>Everything you need to know before we start.</p>
+        </div>
+
+        <div class="faq-item open">
+          <button type="button" aria-expanded="true">What is your typical engagement model?</button>
+          <div class="faq-answer">
+            <p>Most clients start with a discovery sprint followed by a focused design and build phase. We tailor the structure around the size and timeline of the project.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">How quickly can a project launch?</button>
+          <div class="faq-answer">
+            <p>Smaller engagements can launch in as little as 2-4 weeks, while broader brand or product initiatives typically run over 6-10 weeks.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Do you work with in-house teams?</button>
+          <div class="faq-answer">
+            <p>Yes. We regularly collaborate with internal teams, product leads, and marketing groups to plug into existing workflows without friction.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact-grid">
+        <aside class="contact-panel">
+          <div class="eyebrow">Let’s build something</div>
+          <h3>Tell us about your next product or campaign.</h3>
+          <p>Whether you need a new experience, a landing page, or a strategic refresh, we can help you move from idea to traction.</p>
+          <ul>
+            <li>Strategy reviews</li>
+            <li>Web design and product storytelling</li>
+            <li>Launch planning and optimization</li>
+          </ul>
+        </aside>
+
+        <div class="contact-panel">
+          <form id="contact-form">
+            <div class="field-row">
+              <label>
+                Name
+                <input type="text" name="name" placeholder="Your name" />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" placeholder="you@example.com" />
+              </label>
+            </div>
+
+            <label>
+              Project type
+              <select name="projectType">
+                <option value="">Select one</option>
+                <option value="Brand strategy">Brand strategy</option>
+                <option value="Website design">Website design</option>
+                <option value="Product launch">Product launch</option>
+                <option value="Growth campaign">Growth campaign</option>
+              </select>
+            </label>
+
+            <label>
+              Project details
+              <textarea name="message" placeholder="Share a few details about what you want to build."></textarea>
+            </label>
+
+            <button type="submit" class="btn btn-primary">Send inquiry</button>
+            <p id="form-status" class="form-status" data-state="idle"></p>
+          </form>
+        </div>
+      </section>
     </div>
+
+    <script src="/feature.js"></script>
   </body>
 </html>
 

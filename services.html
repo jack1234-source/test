@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services | Nova Studio</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --primary: #7c3aed;
+        --secondary: #22d3ee;
+        --text: #e5eefb;
+        --muted: #a7b4c9;
+        --border: rgba(148, 163, 184, 0.2);
+      }
+      html[data-theme="light"] {
+        --bg: #eef4ff;
+        --primary: #6d28d9;
+        --secondary: #0891b2;
+        --text: #101828;
+        --muted: #4b5563;
+        --border: rgba(107, 114, 128, 0.15);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; font-family: Arial, sans-serif; background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 55%); color: var(--text);
+      }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0 28px; }
+      .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      .nav { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; }
+      .nav a { color: var(--muted); text-decoration: none; }
+      .nav a:hover { color: var(--text); }
+      .theme-toggle {
+        border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text);
+        border-radius: 999px; padding: 9px 14px; cursor: pointer; font-weight: 700;
+      }
+      .hero { padding: 20px 0 40px; }
+      h1 { margin-bottom: 15px; font-size: clamp(2.2rem, 4vw, 3.6rem); }
+      .subtitle { color: var(--muted); line-height: 1.7; max-width: 760px; }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; padding-top: 18px; }
+      .service { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
+      .service h3 { margin-top: 0; }
+      .service p { color: var(--muted); line-height: 1.7; }
+      .info-card {
+        cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      }
+      .info-card:hover, .info-card:focus-visible {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 34px rgba(124, 58, 237, 0.18);
+        border-color: rgba(124, 58, 237, 0.55);
+        outline: none;
+      }
+      .info-card .details { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.25s ease, opacity 0.25s ease, margin-top 0.25s ease; }
+      .info-card.active .details { max-height: 180px; opacity: 1; margin-top: 12px; }
+      .badge {
+        display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, var(--secondary), var(--primary)); font-weight: 700; margin-bottom: 18px;
+      }
+      @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div class="brand">Nova</div>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/work">Work</a>
+          <a href="/contact">Contact</a>
+          <button type="button" class="theme-toggle" data-theme-toggle>☀️ Light mode</button>
+        </nav>
+      </header>
+
+      <main class="hero">
+        <h1>Services built for momentum.</h1>
+        <p class="subtitle">From product direction to launch support, we create the systems and experiences needed to move your brand forward with confidence.</p>
+      </main>
+
+      <section class="grid">
+        <article class="service info-card active" tabindex="0" aria-expanded="true">
+          <div class="badge">01</div>
+          <h3>Brand strategy</h3>
+          <p>Messaging, positioning, and identity direction that make your value obvious and memorable.</p>
+          <div class="details">
+            <p>We map the right message and narrative so the market understands your value in seconds.</p>
+          </div>
+        </article>
+        <article class="service info-card" tabindex="0" aria-expanded="false">
+          <div class="badge">02</div>
+          <h3>Web design</h3>
+          <p>Responsive experiences shaped to convert attention into trust, engagement, and customer action.</p>
+          <div class="details">
+            <p>Our design work balances usability, brand reflection, and conversion clarity across devices.</p>
+          </div>
+        </article>
+        <article class="service info-card" tabindex="0" aria-expanded="false">
+          <div class="badge">03</div>
+          <h3>Product storytelling</h3>
+          <p>Landing pages, launch narratives, and funnels designed to clarify your offering and accelerate adoption.</p>
+          <div class="details">
+            <p>We turn technical details into a clear, compelling story that makes complex products feel simpler.</p>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <script src="/feature.js"></script>
+  </body>
+</html>

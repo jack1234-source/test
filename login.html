@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Nova Studio</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --primary: #7c3aed;
+        --secondary: #22d3ee;
+        --text: #e5eefb;
+        --muted: #a7b4c9;
+        --border: rgba(148, 163, 184, 0.2);
+        --input-bg: rgba(15, 23, 42, 0.72);
+      }
+      html[data-theme="light"] { --bg: #eef4ff; --primary: #6d28d9; --secondary: #0891b2; --text: #101828; --muted: #4b5563; --border: rgba(107, 114, 128, 0.15); --input-bg: rgba(255, 255, 255, 0.9); }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Arial, sans-serif; background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 55%); color: var(--text); }
+      .container { max-width: 880px; margin: 0 auto; padding: 28px 24px 60px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0 28px; }
+      .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      .nav { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+      .nav a { color: var(--muted); text-decoration: none; }
+      .nav a:hover { color: var(--text); }
+      .theme-toggle { border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); border-radius: 999px; padding: 9px 14px; cursor: pointer; font-weight: 700; }
+      .card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 24px; padding: 28px; max-width: 500px; margin: 30px auto 0; }
+      h1 { margin-top: 0; }
+      form { display: grid; gap: 16px; }
+      label { display: grid; gap: 8px; font-weight: 700; }
+      input { width: 100%; padding: 14px 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font: inherit; }
+      .btn { display: inline-block; padding: 14px 22px; border-radius: 12px; border: 0; cursor: pointer; font-weight: 700; background: linear-gradient(135deg, var(--primary), #a855f7); color: white; }
+      .muted { color: var(--muted); margin-top: 14px; }
+      .muted a { color: var(--secondary); text-decoration: none; }
+      .status { min-height: 24px; margin: 0; font-weight: 700; }
+      .status[data-state="error"] { color: #f87171; }
+      .status[data-state="success"] { color: #34d399; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div class="brand">Nova</div>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/work">Work</a>
+          <a href="/contact">Contact</a>
+          <button type="button" class="theme-toggle" data-theme-toggle>☀️ Light mode</button>
+        </nav>
+      </header>
+
+      <div class="card">
+        <h1>Login</h1>
+        <form id="login-form">
+          <label>
+            Username or email
+            <input type="text" name="username" placeholder="yourname" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" placeholder="••••••••" required />
+          </label>
+          <button type="submit" class="btn">Login</button>
+          <p id="login-status" class="status" data-state="idle"></p>
+        </form>
+        <p class="muted">Need an account? <a href="/register">Register here</a></p>
+      </div>
+    </div>
+
+    <script src="/feature.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('login-form');
+        const status = document.getElementById('login-status');
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const payload = Object.fromEntries(new FormData(form).entries());
+          status.textContent = 'Logging in...';
+          status.dataset.state = 'idle';
+
+          try {
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.detail || 'Login failed.');
+            status.textContent = result.message;
+            status.dataset.state = 'success';
+            setTimeout(() => window.location.href = '/dashboard', 700);
+          } catch (error) {
+            status.textContent = error.message;
+            status.dataset.state = 'error';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
